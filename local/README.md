@@ -65,6 +65,8 @@ Description=Apache NiFi Service
 After=network.target
 
 [Service]
+Environment="JAVA_HOME=/usr/lib/jvm/java-11-openjdk-amd64"
+Environment="NIFI_HOME=/opt/nifi"
 User=nifi
 Group=nifi
 ExecStart=/opt/nifi/bin/nifi.sh start
