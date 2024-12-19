@@ -1,0 +1,94 @@
+version: '3.8'
+
+services:
+
+  zookeeper1:
+    image: zookeeper:3.8
+    container_name: zookeeper1
+    restart: always
+    ports:
+      - 2181:2181
+    environment:
+      - ALLOW_ANONYMOUS_LOGIN=yes
+    volumes:
+      - zookeeper1_data:/data
+      - zookeeper1_datalog:/datalog
+
+  nifi-node1:
+    image: apache/nifi:1.28.0
+    container_name: nifi-node1
+    ports:
+      - "8080:8080"
+      - "10000:10000"
+    environment:
+      # NIFI_WEB_HTTP_HOST: "0.0.0.0"
+      NIFI_WEB_HTTP_PORT: "8080"
+      NIFI_CLUSTER_NODE_PROTOCOL_PORT: "10000"
+      NIFI_CLUSTER_IS_NODE: "true"
+      NIFI_CLUSTER_NODE_ADDRESS: "nifi-node1"
+      NIFI_ZK_CONNECT_STRING: "zookeeper1:2181"
+      NIFI_ELECTION_MAX_WAIT: "2 mins"
+      NIFI_ELECTION_RETRY_WAIT: "30 secs"
+      NIFI_SENSITIVE_PROPS_KEY: WlyTvizJvrCupnuCpPPD
+    depends_on:
+      - zookeeper1
+
+
+  nifi-node2:
+    image: apache/nifi:1.28.0
+    container_name: nifi-node2
+    ports:
+      - "8081:8081"
+    environment:
+      # NIFI_WEB_HTTP_HOST: "0.0.0.0"
+      NIFI_WEB_HTTP_PORT: "8081"
+      NIFI_CLUSTER_NODE_PROTOCOL_PORT: "10001"
+      NIFI_CLUSTER_IS_NODE: "true"
+      NIFI_CLUSTER_NODE_ADDRESS: "nifi-node2"
+      NIFI_ZK_CONNECT_STRING: "zookeeper1:2181"
+      NIFI_ELECTION_MAX_WAIT: "2 mins"
+      NIFI_ELECTION_RETRY_WAIT: "30 secs"
+      NIFI_SENSITIVE_PROPS_KEY: WlyTvizJvrCupnuCpPPD
+    depends_on:
+      - zookeeper1
+
+
+  nifi-node3:
+    image: apache/nifi:1.28.0
+    container_name: nifi-node3
+    ports:
+      - "8082:8082"
+    environment:
+      # NIFI_WEB_HTTP_HOST: "0.0.0.0"
+      NIFI_WEB_HTTP_PORT: "8082"
+      NIFI_CLUSTER_NODE_PROTOCOL_PORT: "10002"
+      NIFI_CLUSTER_IS_NODE: "true"
+      NIFI_CLUSTER_NODE_ADDRESS: "nifi-node3"
+      NIFI_ZK_CONNECT_STRING: "zookeeper1:2181"
+      NIFI_ELECTION_MAX_WAIT: "2 mins"
+      NIFI_ELECTION_RETRY_WAIT: "30 secs"
+      NIFI_SENSITIVE_PROPS_KEY: WlyTvizJvrCupnuCpPPD
+    depends_on:
+      - zookeeper1
+
+
+  nifi-registry:
+    image: apache/nifi-registry:1.28.0
+    container_name: nifi-registry
+    ports:
+      - "18080:18080"
+    environment:
+      # NIFI_REGISTRY_WEB_HTTP_HOST: "0.0.0.0"
+      NIFI_REGISTRY_WEB_HTTP_PORT: "18080"
+    depends_on:
+      - nifi-node1
+
+
+volumes:
+  nifi_data: {}
+  openldap-data-volume:
+  zookeeper1_data:
+  zookeeper1_datalog:
+  nifi_1_logs:
+  nifi_1_flowfile_repository:
+  nifi_1_content_repository:
