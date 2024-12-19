@@ -28,6 +28,10 @@ nano /opt/nifi/conf/nifi.properties
 ```
 
 ```
+nano .bashrc
+```
+
+```
 export NIFI_HOME=/opt/nifi
 export PATH=$NIFI_HOME/bin:$PATH
 ```
