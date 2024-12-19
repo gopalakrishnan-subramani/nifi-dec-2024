@@ -12,10 +12,32 @@ unzip nifi-1.28.1-bin.zip
 sudo mv nifi-1.28.1 /opt/nifi
 sudo useradd -r -d /opt/nifi -s /bin/false nifi
 sudo chown -R nifi:nifi /opt/nifi
+
+sudo chown -R nifi:nifi /opt/nifi
+sudo chmod -R 755 /opt/nifi
+
+ls -ld /opt/nifi
+```
+
+to change the properties
+
+``
 nano /opt/nifi/conf/nifi.properties
+```
+
+```
+
+```
+export NIFI_HOME=/opt/nifi
+export PATH=$NIFI_HOME/bin:$PATH
+```
+
+```
 cd /opt/nifi/bin
 ./nifi.sh start
 ./nifi.sh status
+```
+
 sudo nano /etc/systemd/system/nifi.service
 ```
 
