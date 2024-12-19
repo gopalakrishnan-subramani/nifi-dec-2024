@@ -34,6 +34,10 @@ nano .bashrc
 ```
 export NIFI_HOME=/opt/nifi
 export PATH=$NIFI_HOME/bin:$PATH
+
+export JAVA_HOME=/usr/lib/jvm/java-17-openjdk-amd64
+export PATH=$JAVA_HOME/bin:$PATH
+
 ```
 
 ```
