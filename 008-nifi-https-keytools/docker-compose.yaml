@@ -1,0 +1,38 @@
+
+version: '3.8'
+
+services:
+  nifi:
+    image: apache/nifi:1.28.0
+    container_name: nifi
+    # ports:
+    #   - "4443:4443"
+    environment:
+      NIFI_WEB_HTTPS_PORT: 4443
+      SINGLE_USER_CREDENTIALS_USERNAME: nifi-admin
+      SINGLE_USER_CREDENTIALS_PASSWORD: Ni123456789@
+      KEYSTORE_PATH: /opt/nifi/nifi-current/conf/keystore.jks
+      KEYSTORE_TYPE: jks
+      KEYSTORE_PASSWORD: password
+      TRUSTSTORE_PATH: /opt/nifi/nifi-current/conf/truststore.jks
+      TRUSTSTORE_PASSWORD: password
+      TRUSTSTORE_TYPE: jks
+    volumes:
+      - ./certs/quickdemo-keystore.jks:/opt/nifi/nifi-current/conf/keystore.jks
+      - ./certs/quickdemo-truststore.jks:/opt/nifi/nifi-current/conf/truststore.jks
+     
+  
+  nginx:
+    image: nginx:latest
+    container_name: nginx
+    ports:
+        - '4443:4443'
+    volumes:
+        - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+        - ./certs/nifi-cert.pem:/etc/nginx/ssl/nifi-cert.pem:ro
+        - ./certs/nifi-key.key:/etc/nginx/ssl/nifi-key.key:ro
+    depends_on:
+        - nifi  
+volumes:
+  nifi_data: {}
+
